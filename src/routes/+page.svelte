@@ -41,35 +41,42 @@
 
 </script>
 
-<h1>Nostr Start</h1>
+<div class="max-w-4xl mx-auto px-8 mt-12">
+    <h1 class="text-6xl font-semibold text-white">Nostr Start</h1>
 
-<button on:click={login}>Login with Nostr</button>
+    <button on:click={login} class="bg-white text-gray-800 py-2 px-3 rounded-md mt-8">Login with Nostr</button>
+</div>
 
-{#if userProfile}
- <div>
-    <h2>{userProfile.name}</h2>
-    <p>
-        <img src={userProfile.image} style="width:100px; height:100px" alt="fdsa" />    
-    </p>
-    <p>{userProfile.about}</p>
- </div>
-{/if}
+<div class="max-w-4xl mx-auto px-8 text-white mt-8">
+    {#if userProfile}
+    <div class="border border-gray-800 rounded-2xl py-6 px-8 mb-8">
+        <p>
+            <img src={userProfile.image} class="rounded-full w-48 h-48 p-4" alt="fdsa" />    
+        </p>
+        <h2 class="text-5xl mb-4">{userProfile.name}</h2>
+        <p>{userProfile.about}</p>
+    </div>
+    {/if}
 
-{#if hexpubkey}
-    {#await hexpubkey then events}
-        {#each Array.from(events) as event}
-            <div class="eventBlock">
-                <p>{event.content}</p>
-            </div>
-        {/each}
-    {/await}
-{/if}
+    {#if hexpubkey}
+        {#await hexpubkey then events}
+            {#each Array.from(events) as event}
+                <div class="border border-gray-800 rounded-2xl py-6 px-8 my-6">
+                    <p>{event.content}</p>
+                </div>
+            {/each}
+        {/await}
+    {/if}
+</div>
 
-<style>
+<style lang="postcss">
     .eventBlock {
         padding: 10px;
         border: 1px black;
         border-radius: 10px; 
         margin-bottom: 4px;
+    }
+    :global(html) {
+        background-color: black;
     }
 </style>
