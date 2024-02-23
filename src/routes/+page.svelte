@@ -41,20 +41,21 @@
 
 </script>
 
-<div class="max-w-4xl mx-auto px-8 mt-12">
-    <h1 class="text-6xl font-semibold text-white">Nostr Start</h1>
-
-    <button on:click={login} class="bg-white text-gray-800 py-2 px-3 rounded-md mt-8">Login with Nostr</button>
+<div class="mt-12">
+    <button on:click={login} class="bg-white text-gray-800 py-2 px-3 rounded-md">Login with Nostr</button>
 </div>
 
-<div class="max-w-4xl mx-auto px-8 text-white mt-8">
+<div class="max-w-4xl mx-auto text-white mt-8">
     {#if userProfile}
     <div class="border border-gray-800 rounded-2xl py-6 px-8 mb-8">
-        <p>
-            <img src={userProfile.image} class="rounded-full w-48 h-48 p-4" alt="fdsa" />    
-        </p>
-        <h2 class="text-5xl mb-4">{userProfile.name}</h2>
-        <p>{userProfile.about}</p>
+        <div class="flex">
+            <img src={userProfile.image} class="rounded-full w-32 h-32 p-4" alt="fdsa" />    
+        
+            <div class="mx-4 my-auto">
+                <h2 class="text-3xl mb-2">{userProfile.name}</h2>
+                <p>{userProfile.about}</p>
+            </div>
+        </div>
     </div>
     {/if}
 
