@@ -5,14 +5,17 @@
     import { browser } from '$app/environment';
     import {NDKNip07Signer} from "@nostr-dev-kit/ndk";
     import type {NDKUserProfile} from "@nostr-dev-kit/ndk"
+    import { nip19 } from "nostr-tools";
 
     // Create a new NDK instance with explicit relays
     const ndk = new NDK({
         explicitRelayUrls: ["wss://relay.nostr.band", "wss://relay.damus.io", "wss://purplepag.es"],
     });
 
-    let userProfile: NDKUserProfile;
+    let userProfile: NDKUserProfile
+    let nome: NDKUserProfile;;
     let hexpubkey = null;
+    let carlos = null;
 
     //make suro to not run the code on the server
     if(browser){
@@ -20,6 +23,42 @@
             console.log("Connected")
         });
     }
+
+    function fetchEventFromSub(){
+        const sub = ndk.subscribe({kinds: [1]});
+        return carlos = sub;
+
+        sub.on('event', (event) => {
+            //console.log(event);
+        });
+
+        sub.on('eose', () => {
+            console.log('EOSE')
+        });
+
+        sub.on('notice', (notice) => {
+            console.log(notice);
+        });
+
+    }
+
+    const kind0Filter = (pubkey) => ({
+        kinds: [0],
+        authors: [pubkey],
+    });
+
+    async function findProfile(query){
+        //const decodedNpub = nip19.decode(query);
+        //const pubkey = decodedNpub.data;
+
+        let filter0 = {};
+        filter0 = kind0Filter(query);
+
+        nome = await ndk.fetchEvent(filter0) as NDKUserProfile;
+        console.log(nome)
+        //return nome.name
+    }
+
 
     //const user = ndk.getUser({npub: 'npub18qjdjm9qlf2dl4rm2k8fye8y82ve33e6kdehnlnamnmvk69cl8wqtxyng3'});
     
@@ -36,7 +75,12 @@
                 hexpubkey = ndk.fetchEvents({ kinds: [1], authors: [user.hexpubkey] });;
                 userProfile = user.profile as NDKUserProfile;
             })
-        });
+        })
+
+        //const sub = await ndk.subscribe({kinds: [1]});
+        //carlos = sub
+        carlos = await ndk.fetchEvents({ kinds: [1] });
+        console.log(carlos)
     }
 
 </script>
@@ -59,15 +103,16 @@
     </div>
     {/if}
 
-    {#if hexpubkey}
-        {#await hexpubkey then events}
-            {#each Array.from(events) as event}
-                <div class="border border-gray-800 rounded-2xl py-6 px-8 my-6">
-                    <p>{event.content}</p>
-                </div>
-            {/each}
+    {#if carlos}
+        {#await carlos then events}
+        {#each Array.from(events) as event}
+            <div class="border border-gray-800 rounded-2xl py-6 px-8 my-6">
+                <p>{findProfile(event.pubkey)}</p>
+                <p>{event.content}</p>
+            </div>
+        {/each}
         {/await}
-    {/if}
+    {/if}    
 </div>
 
 <style lang="postcss">
