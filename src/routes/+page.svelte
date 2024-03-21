@@ -106,7 +106,7 @@
     {#if carlos}
         {#await carlos then events}
         {#each Array.from(events) as event}
-            <div class="border border-gray-800 rounded-2xl py-6 px-8 my-6">
+            <div class="border border-gray-800 rounded-xl py-6 px-8 my-6">
                 <p>{findProfile(event.pubkey)}</p>
                 <p>{event.content}</p>
             </div>
