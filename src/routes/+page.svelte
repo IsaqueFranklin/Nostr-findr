@@ -13,7 +13,7 @@
     });
 
     let userProfile: NDKUserProfile
-    let nome: NDKUserProfile;;
+    let nome = null;
     let hexpubkey = null;
     let carlos = null;
 
@@ -48,14 +48,22 @@
     });
 
     async function findProfile(query){
-        //const decodedNpub = nip19.decode(query);
-        //const pubkey = decodedNpub.data;
+
+        let coisa = "npub" + query;
+        console.log(coisa)
+        const decodedNpub = nip19.decode(coisa);
+        const pubkey = decodedNpub.data;
 
         let filter0 = {};
-        filter0 = kind0Filter(query);
+        filter0 = kind0Filter(pubkey);
 
-        nome = await ndk.fetchEvent(filter0) as NDKUserProfile;
+        nome = ndk.fetchEvent(filter0);
         console.log(nome)
+        if (!nome) {
+          console.log(false)
+        } else {
+          console.log(true)
+        }
         //return nome.name
     }
 
@@ -79,9 +87,11 @@
 
         //const sub = await ndk.subscribe({kinds: [1]});
         //carlos = sub
+
         carlos = await ndk.fetchEvents({ kinds: [1] });
         console.log(carlos)
-    }
+
+        }
 
 </script>
 
